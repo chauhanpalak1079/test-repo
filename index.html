@@ -3,74 +3,87 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Stack Symphony — Visualizer</title>
+  <title>StackViz — Interactive Stack Visualizer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Space+Grotesk:wght@300;400;500;700&family=Rubik+Glitch&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="bg-orb orb1"></div>
-  <div class="bg-orb orb2"></div>
-  <div class="bg-orb orb3"></div>
 
-  <main class="app">
-    <header class="hero">
-      <h1><span class="glitch">STACK</span> Symphony</h1>
-      <p>Push. Pop. Peek. Experience <strong>LIFO</strong> with aesthetic motion.</p>
-    </header>
+  <!-- ── Top Bar ────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="topbar-title">
+      <h1>Stack<span class="accent">Viz</span></h1>
+      <span class="topbar-sub">LIFO Visualizer</span>
+    </div>
 
-    <section class="controls card">
-      <h2>Operations</h2>
-      <div class="row">
-        <input id="valueInput" type="text" placeholder="Enter value (e.g., 42)" maxlength="20" />
-        <button id="pushBtn" class="btn btn-push">Push</button>
-        <button id="popBtn" class="btn btn-pop">Pop</button>
-        <button id="peekBtn" class="btn btn-peek">Peek</button>
-        <button id="clearBtn" class="btn btn-clear">Clear</button>
+    <nav class="legend" aria-label="Color legend">
+      <span class="legend-item">
+        <span class="dot dot-green"></span>Push / Add
+      </span>
+      <span class="legend-item">
+        <span class="dot dot-pink"></span>Pop / Remove
+      </span>
+      <span class="legend-item">
+        <span class="dot dot-cyan"></span>Info / Neutral
+      </span>
+      <span class="legend-item">
+        <span class="dot dot-amber"></span>Peek / Warning
+      </span>
+    </nav>
+
+    <div class="mode-toggle" role="group" aria-label="Code language toggle">
+      <span class="toggle-label" id="toggleLabelC">C</span>
+      <label class="switch" aria-label="Toggle between C and JavaScript">
+        <input type="checkbox" id="modeToggle" />
+        <span class="slider"></span>
+      </label>
+      <span class="toggle-label" id="toggleLabelJS">JS</span>
+    </div>
+  </header>
+
+  <!-- ── Main 50/50 Grid ────────────────────────────────────── -->
+  <main class="main-grid">
+
+    <!-- Left Panel: Visualizer -->
+    <section class="panel left-panel" aria-label="Stack visualizer">
+      <div class="panel-header">
+        <h2>Visualizer</h2>
+        <span id="sizeBadge" class="badge">Size: 0 / 8</span>
       </div>
-      <p id="message" class="message" aria-live="polite">Ready to visualize your stack ✨</p>
-    </section>
 
-    <section class="grid">
-      <article class="stack-panel card">
-        <div class="panel-head">
-          <h2>Stack Visual</h2>
-          <span id="sizeBadge" class="badge">Size: 0</span>
+      <div class="controls">
+        <div class="input-row">
+          <input id="valueInput" type="text" placeholder="Enter value…" maxlength="20" autocomplete="off" />
+          <button id="pushBtn" class="btn btn-push">Push</button>
+          <button id="popBtn"  class="btn btn-pop">Pop</button>
+          <button id="peekBtn" class="btn btn-peek">Peek</button>
+          <button id="clearBtn" class="btn btn-clear">Clear</button>
         </div>
+        <p id="message" class="message" aria-live="polite">Ready — push something onto the stack.</p>
+      </div>
+
+      <div class="stack-area">
         <div class="stack-wrapper">
           <div id="stackContainer" class="stack-container"></div>
-          <div class="stack-base"></div>
+          <div class="stack-base"><span>▬ BASE ▬</span></div>
         </div>
-      </article>
-
-      <article class="code-panel card">
-        <div class="panel-head">
-          <h2>Pseudocode</h2>
-          <span id="activeOp" class="badge op">Operation: None</span>
-        </div>
-<pre id="pseudo" class="pseudo"><code>
-<span data-op="push">PUSH(x):</span>
-<span data-op="push">  if top == MAX-1: overflow</span>
-<span data-op="push">  else: top = top + 1</span>
-<span data-op="push">        stack[top] = x</span>
-
-<span data-op="pop">POP():</span>
-<span data-op="pop">  if top == -1: underflow</span>
-<span data-op="pop">  else: item = stack[top]</span>
-<span data-op="pop">        top = top - 1</span>
-<span data-op="pop">        return item</span>
-
-<span data-op="peek">PEEK():</span>
-<span data-op="peek">  if top == -1: empty</span>
-<span data-op="peek">  else: return stack[top]</span>
-
-<span data-op="clear">CLEAR():</span>
-<span data-op="clear">  while top != -1:</span>
-<span data-op="clear">    pop()</span>
-</code></pre>
-      </article>
+      </div>
     </section>
+
+    <!-- Right Panel: Code Display -->
+    <section class="panel right-panel" aria-label="Code display">
+      <div class="panel-header">
+        <h2>Code</h2>
+        <span id="activeOp" class="badge">Operation: —</span>
+      </div>
+
+      <div class="code-display">
+        <pre class="code-block" id="codeBlock"><code id="codeContent"><span class="code-line code-comment">// Select an operation to see the code.</span></code></pre>
+      </div>
+    </section>
+
   </main>
 
   <script src="script.js"></script>
